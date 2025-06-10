@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Italy DVS Report 2024 - Visitor Experience Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* SONER Logo Animation */
+        @keyframes sonerScan { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes sonerBlip { 0%, 20%, 100% { opacity: 0; } 2%, 15% { opacity: 1; } 3% { transform: scale(1.2); } }
+        
+        /* SONER Logo styles */
+        .soner-logo { display: flex; align-items: center; color: white; font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 300; }
+        .soner-radar { width: 24px; height: 24px; border-radius: 50%; border: 1px solid white; margin: 0 3px; position: relative; background-color: rgba(255, 255, 255, 0.05); overflow: hidden; }
+        .soner-scanner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; animation: sonerScan 4s linear infinite; transform-origin: center; }
+        .soner-scanner::before { content: ''; position: absolute; top: 0; left: 50%; width: 50%; height: 50%; background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4)); transform-origin: bottom left; clip-path: polygon(0 0, 100% 0, 0 100%); }
+        .soner-scanner::after { content: ''; position: absolute; top: 0; left: 50%; width: 50%; height: 1px; background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 1)); transform-origin: left center; box-shadow: 0 0 4px rgba(255, 255, 255, 0.8); }
+        .soner-blip { position: absolute; width: 2px; height: 2px; background-color: white; border-radius: 50%; opacity: 0; box-shadow: 0 0 4px white; }
+        .soner-blip:nth-child(1) { top: 25%; left: 30%; animation: sonerBlip 4s 1s infinite; }
+        .soner-blip:nth-child(2) { top: 65%; left: 60%; animation: sonerBlip 4s 2.5s infinite; }
+        .soner-tagline { color: white; font-size: 8px; text-transform: uppercase; font-weight: 500; letter-spacing: 0.5em; margin-left: 10px; opacity: 0.8; }
+
+        :root {
+            --primary: #4285f4;
+            --primary-light: #1a2233;
+            --primary-dark: #8ab4f8;
+            --secondary: #34a853;
+            --secondary-light: #1a2a1e;
+            --warning: #fbbc04;
+            --warning-light: #332a1a;
+            --danger: #ea4335;
+            --danger-light: #331f1e;
+            --gray-100: #1e1e1e;
+            --gray-200: #2d2d2d;
+            --gray-300: #3d3d3d;
+            --gray-400: #4d4d4d;
+            --gray-500: #777777;
+            --gray-600: #a0a0a0;
+            --gray-700: #c0c0c0;
+            --gray-800: #e0e0e0;
+            --gray-900: #f0f0f0;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 15px 25px rgba(0, 0, 0, 0.6);
+            --radius-sm: 4px;
+            --radius: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s ease;
+            --bg-color: #000000;
+            --card-bg: #121212;
+            --section-bg: #181818;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--gray-800);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1a73e8 0%, #174ea6 100%);
+            color: white;
+            padding: 32px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI0MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IHgxPSIxMDAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiIGlkPSJhIj48c3RvcCBzdG9wLWNvbG9yPSIjRkZGIiBzdG9wLW9wYWNpdHk9Ii4wNSIgb2Zmc2V0PSIwJSIvPjxzdG9wIHN0b3AtY29sb3I9IiNGRkYiIHN0b3Atb3BhY2l0eT0iLjAyIiBvZmZzZXQ9IjEwMCUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cGF0aCBkPSJNMTQ0MCAyMDBjLTEzMS44LTEyLjktMjY3LjgtMTkuNC00MDgtMTkuNC0xNDAuMiAwLTI3Ni4yIDYuNS00MDggMTkuNFYwaDgxNnYyMDB6IiBmaWxsPSJ1cmwoI2EpIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            margin-top: 0;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--gray-900);
+        }
+        
+        h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        h3 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+        }
+        
+        h4 {
+            font-size: 1.15rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .dashboard-section {
+            background-color: var(--section-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 32px;
+            transition: var(--transition);
+            border: 1px solid var(--gray-300);
+        }
+        
+        .dashboard-section:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .dashboard-section h2 {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid var(--gray-200);
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+            color: var(--gray-900);
+            font-size: 1.5rem;
+        }
+        
+        .dashboard-section h2 i {
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        
+        .metric-card {
+            background-color: var(--gray-100);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+        
+        .metric-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .metric-name i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        
+        .metric-description {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        
+        .change {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .change i {
+            margin-right: 4px;
+            font-size: 0.75rem;
+        }
+        
+        .positive { 
+            background-color: var(--secondary-light); 
+            color: var(--secondary);
+        }
+        
+        .negative { 
+            background-color: var(--danger-light); 
+            color: var(--danger);
+        }
+        
+        .neutral {
+            background-color: var(--gray-300);
+            color: var(--gray-700);
+        }
+        
+        .tab-container {
+            margin-top: 24px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid var(--gray-300);
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray-600);
+            border-radius: var(--radius) var(--radius) 0 0;
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+        
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+        
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+        
+        .tab-btn.active {
+            color: var(--primary);
+        }
+        
+        .tab-btn.active::after {
+            transform: scaleX(1);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 8px 0 24px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .insight-summary {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 20px 24px;
+            margin-bottom: 28px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            position: relative;
+        }
+        
+        .insight-summary::before {
+            content: '\f0eb';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            font-size: 1.5rem;
+            color: var(--primary);
+            opacity: 0.2;
+        }
+        
+        .insight-summary h3 {
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .insight-summary h3 i {
+            margin-right: 10px;
+        }
+        
+        .insight-summary p {
+            margin: 0;
+            color: var(--gray-800);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+        
+        .highlight-box {
+            background-color: var(--warning-light);
+            border-left: 4px solid var(--warning);
+            padding: 20px 24px;
+            margin: 24px 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            position: relative;
+        }
+        
+        .highlight-box::before {
+            content: '\f071';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            font-size: 1.5rem;
+            color: var(--warning);
+            opacity: 0.2;
+        }
+        
+        .highlight-box h5 {
+            color: #d68000;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .highlight-box h5 i {
+            margin-right: 10px;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 28px;
+            margin: 28px 0;
+        }
+        
+        .data-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-300);
+            transition: var(--transition);
+        }
+        
+        .data-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+        }
+        
+        .data-card h4 {
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            color: var(--gray-800);
+            display: flex;
+            align-items: center;
+        }
+        
+        .data-card h4 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .data-card ul {
+            padding-left: 18px;
+            margin-bottom: 0;
+        }
+        
+        .data-card li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .data-card li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .recommendation-card {
+            background-color: var(--gray-100);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .recommendation-card::after {
+            content: '\f0eb';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--primary);
+            opacity: 0.05;
+        }
+        
+        .recommendation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .recommendation-card h4 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .recommendation-card h4 i {
+            margin-right: 10px;
+        }
+        
+        .recommendation-card p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .recommendation-card p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 24px 0;
+        }
+        
+        .comparison-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid var(--gray-300);
+            transition: var(--transition);
+        }
+        
+        .comparison-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .comparison-card h4 {
+            margin-bottom: 16px;
+            color: var(--gray-800);
+            display: flex;
+            align-items: center;
+        }
+        
+        .comparison-card h4 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .comparison-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--gray-300);
+        }
+        
+        .comparison-item:last-child {
+            border-bottom: none;
+        }
+        
+        .comparison-label {
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+        
+        .comparison-value {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+        
+        .print-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 6px 16px rgba(26, 115, 232, 0.5);
+        }
+        
+        @media (max-width: 1199px) and (min-width: 769px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .metrics-grid, .data-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab-buttons {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                width: 100%;
+                text-align: left;
+                padding: 12px;
+                border-radius: 0;
+            }
+            
+            .print-btn {
+                bottom: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                right: 20px;
+            }
+            
+            .container {
+                padding: 0 16px;
+            }
+            
+            .dashboard-section {
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+            }
+            
+            .dashboard-section {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+            
+            .print-btn {
+                display: none;
+            }
+            
+            .tab-content {
+                display: block !important;
+            }
+            
+            .tab-buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;">
+                <div class="soner-logo">
+                    S<div class="soner-radar">
+                        <div class="soner-scanner"></div>
+                        <div class="soner-blip"></div>
+                        <div class="soner-blip"></div>
+                    </div>NER
+                    <span class="soner-tagline">Visual Intelligence</span>
+                </div>
+            </div>
+            <h1>Italy DVS Report 2024</h1>
+            <h2 style="font-size: 1.3rem; margin-top: 5px; font-weight: 500;">Visitor Experience Analysis</h2>
+            <p>Department of Culture and Tourism - Abu Dhabi</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Visitor Reactions & Satisfaction -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-heart"></i> Visitor Reactions & Satisfaction</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-smile"></i> Overall Satisfaction</div>
+                    <div class="metric-value">77%</div>
+                    <div class="metric-description">88% for overnight visitors, 70% for same-day visitors</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-chart-line"></i> Net Promoter Score</div>
+                    <div class="metric-value">23</div>
+                    <div class="metric-description">30% promoters, 64% passives, 6% detractors</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-redo"></i> Willingness to Visit Again</div>
+                    <div class="metric-value">79%</div>
+                    <div class="metric-description">86% for overnight visitors, 68% for same-day visitors</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-thumbs-up"></i> Willingness to Recommend</div>
+                    <div class="metric-value">30%</div>
+                    <div class="metric-description">32% for overnight visitors, 27% for same-day visitors</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-user-plus"></i> First-time Visitors</div>
+                    <div class="metric-value">82%</div>
+                    <div class="metric-description">18% are repeat visitors to Abu Dhabi</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-moon"></i> Overnight vs Same-day</div>
+                    <div class="metric-value">54% / 46%</div>
+                    <div class="metric-description">Majority stay overnight in Abu Dhabi</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visitor Profile & Demographics -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-users"></i> Visitor Profile & Demographics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-globe"></i> Survey Representation</div>
+                    <div class="metric-value">2%</div>
+                    <div class="metric-description">Of surveyed international visitors (5,191 Italian visitor interviews)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-venus-mars"></i> Gender Split</div>
+                    <div class="metric-value">50% / 50%</div>
+                    <div class="metric-description">Male / Female - equal distribution</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-birthday-cake"></i> Age Distribution</div>
+                    <div class="metric-value">55%</div>
+                    <div class="metric-description">Aged 30-49 years (mature demographic)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-heart"></i> Travel Companions</div>
+                    <div class="metric-value">69%</div>
+                    <div class="metric-description">Travel with spouse/partner, 23% with children under 18</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-user-friends"></i> Average Party Size</div>
+                    <div class="metric-value">2.6</div>
+                    <div class="metric-description">People per travel group</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-map-marked-alt"></i> Visit Purpose</div>
+                    <div class="metric-value">72% / 6%</div>
+                    <div class="metric-description">Leisure / VFR (Visiting Friends & Relatives)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Travel Behavior & Booking Patterns -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-suitcase"></i> Travel Behavior & Booking Patterns</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-box"></i> Package vs Non-Package</div>
+                    <div class="metric-value">83%</div>
+                    <div class="metric-description">Non-package visitors (independent travelers)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-calendar-alt"></i> Booking Timeline</div>
+                    <div class="metric-value">76%</div>
+                    <div class="metric-description">Book flights within 0-2 months of travel</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-plane-arrival"></i> Entry Point</div>
+                    <div class="metric-value">39% / 61%</div>
+                    <div class="metric-description">Via Abu Dhabi / Via Dubai</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-plane"></i> Etihad Usage</div>
+                    <div class="metric-value">63%</div>
+                    <div class="metric-description">Arrived with Etihad Airways (among those via Abu Dhabi)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-bed"></i> Average Stay</div>
+                    <div class="metric-value">4 nights</div>
+                    <div class="metric-description">In hotels (8 nights with friends/family)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-hotel"></i> Accommodation Type</div>
+                    <div class="metric-value">91% / 7%</div>
+                    <div class="metric-description">Hotels/Hotel apartments / With friends/family</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visitor Spending Analysis -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-dollar-sign"></i> Visitor Spending Analysis</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-calculator"></i> Total Daily Spend</div>
+                    <div class="metric-value">$142</div>
+                    <div class="metric-description">Per person per day (excluding accommodation)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-sun"></i> Same-day Spend</div>
+                    <div class="metric-value">$147</div>
+                    <div class="metric-description">Per person per day (higher than overnight visitors)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-moon"></i> Overnight Spend</div>
+                    <div class="metric-value">$140</div>
+                    <div class="metric-description">Per person per day (excluding accommodation)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-bed"></i> Accommodation</div>
+                    <div class="metric-value">$56</div>
+                    <div class="metric-description">Per person per night</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-bus"></i> Transportation</div>
+                    <div class="metric-value">$24</div>
+                    <div class="metric-description">Per person per day average</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-utensils"></i> Food & Beverage</div>
+                    <div class="metric-value">$37</div>
+                    <div class="metric-description">Per person per day average</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-ticket-alt"></i> Attractions</div>
+                    <div class="metric-value">$32</div>
+                    <div class="metric-description">Per person per day average</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-shopping-bag"></i> Shopping</div>
+                    <div class="metric-value">$49</div>
+                    <div class="metric-description">Per person per day average</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attraction Performance: Planning vs Reality -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-map-marked-alt"></i> Attraction Performance: Planning vs Reality</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h4><i class="fas fa-search"></i> Planning Phase Interest (TripAdvisor Searches)</h4>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Saadiyat Beach</span>
+                        <span class="comparison-value">8,128 searches</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Sheikh Zayed Grand Mosque</span>
+                        <span class="comparison-value">4,802 searches</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Emirates Palace</span>
+                        <span class="comparison-value">2,914 searches</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Ferrari World</span>
+                        <span class="comparison-value">2,848 searches</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Qasr Al Watan</span>
+                        <span class="comparison-value">2,610 searches</span>
+                    </div>
+                </div>
+                
+                <div class="comparison-card">
+                    <h4><i class="fas fa-check-circle"></i> Actual Visitation (DVS Data)</h4>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Sheikh Zayed Grand Mosque</span>
+                        <span class="comparison-value">77% visited</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Ferrari World</span>
+                        <span class="comparison-value">44% visited</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Louvre Abu Dhabi</span>
+                        <span class="comparison-value">43% visited</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Abu Dhabi Corniche</span>
+                        <span class="comparison-value">37% visited</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Qasr Al Watan</span>
+                        <span class="comparison-value">33% visited</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h5><i class="fas fa-lightbulb"></i> Key Insight: Strong Beach & Cultural Interest</h5>
+                <p><strong>Saadiyat Beach</strong> dominates planning searches (8,128) showing strong beach interest, while <strong>Sheikh Zayed Grand Mosque</strong> leads actual visitation (77%). <strong>Ferrari World</strong> shows strong Italian appeal with high search volume (2,848) and good conversion (44% visited), leveraging the Italian automotive connection.</p>
+            </div>
+        </div>
+
+        <!-- Visitor Motivations & Drivers -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-bullseye"></i> Visitor Motivations & Drivers</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-globe-asia"></i> Cultural Interest</div>
+                    <div class="metric-value">18%</div>
+                    <div class="metric-description">Top motivation: Want to experience a new culture</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-comments"></i> Word-of-mouth</div>
+                    <div class="metric-value">14%</div>
+                    <div class="metric-description">Heard good things from family and friends</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-map"></i> New Destination</div>
+                    <div class="metric-value">12%</div>
+                    <div class="metric-description">Wanted to visit a new place</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-roller-coaster"></i> Theme Parks/Attractions</div>
+                    <div class="metric-value">9%</div>
+                    <div class="metric-description">Want to visit specific theme parks and leisure attractions</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-share-alt"></i> Social Media Influence</div>
+                    <div class="metric-value">9%</div>
+                    <div class="metric-description">Read good things about Abu Dhabi on social media</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-monument"></i> Cultural Sites</div>
+                    <div class="metric-value">4%</div>
+                    <div class="metric-description">Want to visit specific museums and cultural sites</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Touchpoint Satisfaction Analysis -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-star"></i> Touchpoint Satisfaction Analysis</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-monument"></i> Sites/Attractions</div>
+                    <div class="metric-value">86% / 79%</div>
+                    <div class="metric-description">Usage / Satisfaction (highest satisfaction touchpoint)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-utensils"></i> Food & Beverage</div>
+                    <div class="metric-value">80% / 82%</div>
+                    <div class="metric-description">Usage / Satisfaction (second highest satisfaction)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-bus"></i> Transportation</div>
+                    <div class="metric-value">74% / 62%</div>
+                    <div class="metric-description">Usage / Satisfaction</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-shopping-cart"></i> Retail</div>
+                    <div class="metric-value">43% / 86%</div>
+                    <div class="metric-description">Usage / Satisfaction (least used touchpoint)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name"><i class="fas fa-bed"></i> Accommodation</div>
+                    <div class="metric-value">91% / 84%</div>
+                    <div class="metric-description">Usage / Satisfaction (among overnight visitors)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visitor Challenges & Pain Points -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> Visitor Challenges & Pain Points</h2>
+            <div class="data-grid">
+                <div class="data-card">
+                    <h4><i class="fas fa-list"></i> Top Challenges During Visit</h4>
+                    <ul>
+                        <li><strong>Limited info on tourist services</strong> - 13%</li>
+                        <li><strong>Poor/limited free wifi</strong> - 11%</li>
+                        <li><strong>Poor public transportation</strong> - 10%</li>
+                        <li><strong>Poor hotel services</strong> - 9%</li>
+                        <li><strong>Long distance between places</strong> - 6%</li>
+                        <li><strong>Weather was too hot</strong> - 6%</li>
+                        <li><strong>No information on rules/fines</strong> - 5%</li>
+                        <li><strong>Bad attitude from service staff</strong> - 5%</li>
+                    </ul>
+                </div>
+                <div class="data-card">
+                    <h4><i class="fas fa-taxi"></i> Transportation Satisfaction</h4>
+                    <ul>
+                        <li><strong>35%</strong> satisfied with taxi drivers providing suggestions</li>
+                        <li><strong>38%</strong> find it easy to communicate with taxi drivers</li>
+                        <li><strong>50%</strong> satisfied that taxi drivers know key site locations</li>
+                        <li><strong>Only 31%</strong> aware of Abu Dhabi Tourist Shuttle Bus</li>
+                        <li><strong>35%</strong> find it easy to book shuttle bus (among aware)</li>
+                    </ul>
+                </div>
+                <div class="data-card">
+                    <h4><i class="fas fa-utensils"></i> F&B Satisfaction</h4>
+                    <ul>
+                        <li><strong>35% satisfied with F&B prices in general</strong></li>
+                        <li><strong>66% satisfied with restaurant variety</strong></li>
+                        <li><strong>73% satisfied with opening/closing hours</strong></li>
+                        <li><strong>Only 13% visited nightclubs/clubs/pubs</strong></li>
+                    </ul>
+                </div>
+                <div class="data-card">
+                    <h4><i class="fas fa-monument"></i> Sites/Attractions Satisfaction</h4>
+                    <ul>
+                        <li><strong>43% satisfied with pricing</strong></li>
+                        <li><strong>71% satisfied with accessibility</strong></li>
+                        <li><strong>69% satisfied with info at sites/attractions</strong></li>
+                        <li><strong>70% satisfied with atmosphere/ambience</strong></li>
+                    </ul>
+                </div>
+                <div class="data-card">
+                    <h4><i class="fas fa-shopping-cart"></i> Retail/Shopping Satisfaction</h4>
+                    <ul>
+                        <li><strong>47% satisfied with customer service</strong></li>
+                        <li><strong>47% satisfied with atmosphere/ambience</strong></li>
+                        <li><strong>51% satisfied with pricing</strong></li>
+                        <li><strong>69% satisfied with accessibility</strong></li>
+                        <li><strong>Least used touchpoint</strong> (only 43% visit malls)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Value Perception vs Dubai -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-balance-scale"></i> Value Perception vs Dubai</h2>
+            
+            <div class="insight-summary">
+                <h3><i class="fas fa-chart-pie"></i> Key Finding</h3>
+                <p>67% of Italian visitors who visited both Abu Dhabi and Dubai find Dubai more value for money overall. However, Abu Dhabi shows competitive performance in F&B (47% vs 53% for Dubai), making it the most competitive category.</p>
+            </div>
+            
+            <div class="data-grid">
+                <div class="data-card">
+                    <h4><i class="fas fa-trophy"></i> Dubai Advantages</h4>
+                    <ul>
+                        <li><strong>Transportation</strong> - 74% favor Dubai</li>
+                        <li><strong>Shopping/Retail</strong> - 69% favor Dubai</li>
+                        <li><strong>Accommodation</strong> - 64% favor Dubai</li>
+                        <li><strong>Sites/Attractions</strong> - 56% favor Dubai</li>
+                    </ul>
+                </div>
+                <div class="data-card">
+                    <h4><i class="fas fa-star"></i> Abu Dhabi Competitive Areas</h4>
+                    <ul>
+                        <li><strong>Food & Beverage</strong> - 47% favor Abu Dhabi (most competitive)</li>
+                        <li><strong>Sites/Attractions</strong> - 44% favor Abu Dhabi</li>
+                        <li><strong>Accommodation</strong> - 36% favor Abu Dhabi</li>
+                        <li><strong>Shopping/Retail</strong> - 31% favor Abu Dhabi</li>
+                    </ul>
+                </div>
+                <div class="data-card">
+                    <h4><i class="fas fa-bus"></i> Why Dubai Wins Transportation</h4>
+                    <ul>
+                        <li><strong>Dubai Metro system</strong> (affordable and convenient)</li>
+                        <li><strong>Moving around in Dubai is easier</strong></li>
+                        <li><strong>Key sites connected by metro/bus</strong></li>
+                        <li><strong>More public transportation options</strong></li>
+                    </ul>
+                </div>
+                <div class="data-card">
+                    <h4><i class="fas fa-shopping-bag"></i> Why Dubai Wins Shopping</h4>
+                    <ul>
+                        <li><strong>More discounts/offers/bargain deals</strong></li>
+                        <li><strong>Bigger malls</strong></li>
+                        <li><strong>More brands under one mall</strong></li>
+                        <li><strong>Wide variety of shopping places</strong></li>
+                    </ul>
+                </div>
+                <div class="data-card">
+                    <h4><i class="fas fa-monument"></i> Why Dubai Wins Sites/Attractions</h4>
+                    <ul>
+                        <li><strong>Sites are closer to each other</strong></li>
+                        <li><strong>More offers/deals on attraction tickets</strong></li>
+                        <li><strong>Variety of choices for attractions</strong></li>
+                        <li><strong>Better experience at attractions</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strategic Insights & Recommendations -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-lightbulb"></i> Strategic Insights & Recommendations</h2>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="conversion">Conversion Opportunities</button>
+                    <button class="tab-btn" data-tab="experience">Experience Enhancement</button>
+                    <button class="tab-btn" data-tab="competitive">Competitive Positioning</button>
+                    <button class="tab-btn" data-tab="marketing">Marketing Implications</button>
+                </div>
+                
+                <div class="tab-content active" id="conversion-tab">
+                    <div class="insight-summary">
+                        <h3><i class="fas fa-chart-line"></i> Key Opportunity</h3>
+                        <p>46% of Italian visitors are same-day visitors, representing a significant conversion opportunity to overnight stays. Same-day visitors spend more per day ($147 vs $140) but shorter duration limits total revenue potential. Shopping emerges as the highest spending category ($49/day), presenting untapped retail conversion opportunities.</p>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-shopping-bag"></i> Leverage High Shopping Spend</h4>
+                        <p>Capitalize on shopping being the highest spending category ($49/day) despite low usage (43%):</p>
+                        <ul>
+                            <li>Create "Shop & Stay" packages combining luxury shopping with overnight accommodation</li>
+                            <li>Develop Italian-focused shopping experiences at Yas Mall and Marina Mall</li>
+                            <li>Partner with luxury brands for exclusive Italian visitor experiences</li>
+                            <li>Create shopping + beach packages (Saadiyat Beach + premium shopping)</li>
+                            <li>Leverage high shopping satisfaction (86%) to drive increased participation</li>
+                        </ul>
+                        <p><strong>Potential Impact:</strong> Increasing shopping participation from 43% to 60% could significantly boost per-visitor revenue</p>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-moon"></i> Convert Same-day to Overnight Visitors</h4>
+                        <p>Develop targeted campaigns to convert the 46% same-day visitors to overnight stays:</p>
+                        <ul>
+                            <li>Create "Stay & Explore" packages combining accommodation with beach, cultural attractions, and shopping</li>
+                            <li>Highlight experiences that require more time (Saadiyat Beach + Sheikh Zayed Grand Mosque + luxury shopping)</li>
+                            <li>Partner with hotels for special Italian market packages with Ferrari World and shopping themes</li>
+                            <li>Develop evening cultural and shopping experiences to encourage overnight stays</li>
+                        </ul>
+                        <p><strong>Potential Impact:</strong> Converting 20% of same-day visitors could increase overnight visitors to 65%</p>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-redo"></i> Repeat Visitor Strategy</h4>
+                        <p>With 82% first-time visitors, focus on converting them to repeat visitors:</p>
+                        <ul>
+                            <li>Implement loyalty programs targeting Italian beach, cultural, and shopping enthusiasts</li>
+                            <li>Create "Return Visitor" exclusive experiences at Saadiyat Beach, cultural sites, and premium shopping venues</li>
+                            <li>Develop seasonal campaigns targeting previous visitors with new attractions and shopping experiences</li>
+                            <li>Leverage the high satisfaction (77%) to encourage return visits</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="experience-tab">
+                    <div class="insight-summary">
+                        <h3><i class="fas fa-tools"></i> Priority Areas</h3>
+                        <p>Address the top visitor challenges: limited tourist info (13%), poor wifi (11%), and transportation issues (10%) to improve overall satisfaction beyond the current 77%.</p>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-info-circle"></i> Information Enhancement</h4>
+                        <p>Address the 13% citing limited tourist information:</p>
+                        <ul>
+                            <li>Develop comprehensive Italian-language tourist information centers</li>
+                            <li>Create digital information kiosks at key locations</li>
+                            <li>Improve signage and wayfinding in Italian at major attractions</li>
+                            <li>Develop mobile apps with Italian language support</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-wifi"></i> Digital Infrastructure</h4>
+                        <p>Address the 11% citing poor/limited wifi:</p>
+                        <ul>
+                            <li>Expand free wifi coverage at all major tourist areas</li>
+                            <li>Improve wifi quality and speed at beaches and cultural sites</li>
+                            <li>Create dedicated tourist wifi networks with Italian language portals</li>
+                            <li>Partner with hotels to ensure consistent wifi quality</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-bus"></i> Transportation Enhancement</h4>
+                        <p>Address the 10% citing poor public transportation:</p>
+                        <ul>
+                            <li>Improve taxi driver training on key attractions and basic Italian phrases</li>
+                            <li>Increase awareness of the Abu Dhabi Tourist Shuttle Bus (only 31% aware)</li>
+                            <li>Develop transportation apps with Italian language support</li>
+                            <li>Create dedicated transportation packages for Italian visitors</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="competitive-tab">
+                    <div class="insight-summary">
+                        <h3><i class="fas fa-balance-scale"></i> Competitive Challenge</h3>
+                        <p>67% find Dubai more value for money overall. Abu Dhabi must leverage its competitive F&B position (47% vs 53% for Dubai) while addressing transportation, shopping, and sites/attractions perceptions where Dubai leads significantly.</p>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-utensils"></i> Leverage F&B Competitiveness</h4>
+                        <p>Capitalize on Abu Dhabi's most competitive category (47% vs 53% for Dubai):</p>
+                        <ul>
+                            <li>Develop "Culinary Capital" positioning campaigns highlighting Abu Dhabi's F&B strengths</li>
+                            <li>Create premium food-focused packages combining dining with beach and cultural experiences</li>
+                            <li>Highlight unique dining experiences and culinary heritage not available in Dubai</li>
+                            <li>Leverage this competitive advantage to drive overall value perception</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-bus"></i> Address Transportation Perception</h4>
+                        <p>Counter Dubai's transportation advantage (74% favor Dubai):</p>
+                        <ul>
+                            <li>Promote the free Abu Dhabi Tourist Shuttle Bus more effectively (only 31% aware)</li>
+                            <li>Develop integrated transportation packages for key Italian attractions</li>
+                            <li>Create "Easy Access" campaigns highlighting transportation options</li>
+                            <li>Partner with ride-sharing services for special rates between beach and cultural attractions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-shopping-bag"></i> Counter Shopping Perception Gap</h4>
+                        <p>Address Dubai's shopping advantage (69% favor Dubai) while leveraging high Italian shopping spend ($49/day):</p>
+                        <ul>
+                            <li>Create exclusive Italian shopping experiences at Yas Mall and Marina Mall</li>
+                            <li>Develop luxury shopping + beach packages (Saadiyat Beach + premium retail)</li>
+                            <li>Partner with Italian luxury brands for Abu Dhabi-exclusive experiences</li>
+                            <li>Highlight unique shopping + cultural combinations not available in Dubai</li>
+                            <li>Leverage high shopping satisfaction (86%) to drive increased participation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-car"></i> Leverage Beach & Ferrari Appeal</h4>
+                        <p>Capitalize on Italian beach interest and Ferrari connection:</p>
+                        <ul>
+                            <li>Develop beach-themed packages (Saadiyat Beach + Ferrari World combinations)</li>
+                            <li>Create partnerships with Italian automotive brands for exclusive experiences</li>
+                            <li>Highlight Abu Dhabi's unique beach and motorsport combination</li>
+                            <li>Develop beach cultural tours combining relaxation with heritage</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="marketing-tab">
+                    <div class="insight-summary">
+                        <h3><i class="fas fa-bullseye"></i> Marketing Focus</h3>
+                        <p>Leverage strong cultural motivation (18%) and word-of-mouth influence (14%) while targeting mature families (69% travel with spouse/partner, 23% with children, 55% aged 30-49).</p>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-globe-asia"></i> Cultural Experience Marketing</h4>
+                        <p>Leverage the 18% motivated by cultural experiences:</p>
+                        <ul>
+                            <li>Create "Cultural Discovery" campaigns highlighting Sheikh Zayed Grand Mosque (4,802 searches, 77% visited)</li>
+                            <li>Develop partnerships with Italian cultural institutions</li>
+                            <li>Highlight the blend of traditional and modern culture</li>
+                            <li>Create immersive cultural experience packages with beach elements</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-comments"></i> Amplify Word-of-Mouth</h4>
+                        <p>Leverage the 14% motivated by family/friends recommendations:</p>
+                        <ul>
+                            <li>Create "Share Your Experience" campaigns encouraging social sharing</li>
+                            <li>Develop referral programs for Italian visitors</li>
+                            <li>Partner with Italian travel influencers and beach lifestyle enthusiasts</li>
+                            <li>Create user-generated content campaigns around beach and cultural experiences</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-family"></i> Target Mature Families</h4>
+                        <p>Focus on the mature family market (69% with spouse, 23% with children, 55% aged 30-49):</p>
+                        <ul>
+                            <li>Develop family-focused packages combining beach relaxation and cultural sites</li>
+                            <li>Create "Family Heritage" experiences showcasing traditional and modern Abu Dhabi</li>
+                            <li>Highlight family-friendly accommodations and restaurants</li>
+                            <li>Develop content showcasing multi-generational beach and cultural experiences</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-umbrella-beach"></i> Beach-Centric Strategy</h4>
+                        <p>Leverage the dominant beach interest (Saadiyat Beach 8,128 searches):</p>
+                        <ul>
+                            <li>Develop Instagram-worthy beach experiences at Saadiyat Beach</li>
+                            <li>Create platform-specific content for Italian beach lifestyle preferences</li>
+                            <li>Partner with Italian beach and travel influencers</li>
+                            <li>Develop hashtag campaigns around #AbuDhabiBeaches and #SaadiyatExperience</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <button class="print-btn" onclick="window.print()" title="Print Report"><i class="fas fa-print"></i></button>
+    
+    <footer style="background-color: var(--gray-100); padding: 20px 0; text-align: center; margin-top: 40px; border-top: 1px solid var(--gray-300);">
+        <div class="container">
+            <p style="margin: 0; color: var(--gray-700); font-size: 0.9rem;">© 2025 Research & Insights Unit | Strategic Marketing & Communications | Department of Culture and Tourism – Abu Dhabi</p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    button.classList.add('active');
+                    document.getElementById(targetTab + '-tab').classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
